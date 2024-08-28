@@ -10,6 +10,7 @@ public class HomePage {
     private By userNameField = new By.ByName("user-name");
     private By passwordField = new By.ByName("password");
     private By loginButton = new By.ById("login-button");
+    private By errorContainer = new By.ByClassName("error-message-container");
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
@@ -22,5 +23,15 @@ public class HomePage {
     }
     public void clickLoginButton() {
         driver.findElement(loginButton).click();
+    }
+
+    public void login(String userName, String password) {
+        enterUserName(userName);
+        enterPassword(password);
+        clickLoginButton();
+    }
+
+    public String getErrorMessage() {
+        return driver.findElement(errorContainer).getText();
     }
 }

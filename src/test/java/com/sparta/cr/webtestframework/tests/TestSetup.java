@@ -16,7 +16,6 @@ public class TestSetup {
     private static final String DRIVER_LOCATION = "src/test/resources/chromedriver.exe";
     private static ChromeDriverService service;
     private WebDriver webDriver;
-    private Website website;
 
     private static ChromeOptions getChromeOptions(){
         ChromeOptions options = new ChromeOptions();
