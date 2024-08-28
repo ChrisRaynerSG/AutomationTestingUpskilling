@@ -16,7 +16,10 @@ This project includes two Test classes for Selenium Web Driver and tests the fol
     
     - Happy login path
     - Sad login path
+    - logging out
     - inventory page loads correctly
+    - adding items to cart
+    - removing items from cart
    
   - `ToolsQaTests`
     - Draggable works correctly
