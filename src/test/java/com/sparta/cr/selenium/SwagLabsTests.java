@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -78,6 +80,42 @@ public class SwagLabsTests {
 
     }
 
+
+    @Test
+    @DisplayName("GIVEN I enter a valid username AND an invalid password WHEN I click login THEN I should see epic sad face")
+    public void unsuccessfulLogin(){
+        webDriver.get(BASE_URL);
+        WebElement usernameField = webDriver.findElement(By.name("user-name"));
+        WebElement passwordField = webDriver.findElement(By.name("password"));
+        WebElement loginButton = webDriver.findElement(By.id("login-button"));
+        WebElement errorField = webDriver.findElement(By.className("error-message-container"));
+        usernameField.sendKeys("standard_user");
+        passwordField.sendKeys("wrong_password");
+        loginButton.click();
+        MatcherAssert.assertThat(webDriver.getCurrentUrl(), Matchers.is(BASE_URL));
+        MatcherAssert.assertThat(errorField.getText(), Matchers.startsWith("Epic sadface:"));
+
+    }
+
+    @Test
+    @DisplayName("GIVEN I am logged in WHEN I click logout THEN I should be logged out of the webpage")
+    public void successfulLogout() throws InterruptedException {
+        webDriver.get(BASE_URL);
+        WebElement username = webDriver.findElement(By.name("user-name"));
+        WebElement password = webDriver.findElement(By.name("password"));
+        WebElement login = webDriver.findElement(By.id("login-button"));
+        username.sendKeys("standard_user");
+        password.sendKeys("secret_sauce");
+        login.click();
+        WebElement hamburgerMenu = webDriver.findElement(By.id("react-burger-menu-btn"));
+        hamburgerMenu.click();
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")));
+        Assertions.assertEquals(BASE_URL + "inventory.html", webDriver.getCurrentUrl());
+        logoutButton.click();
+        MatcherAssert.assertThat(webDriver.getCurrentUrl(), Matchers.is(BASE_URL));
+
+    }
     @Test
     @DisplayName("Given I enter a valid username and password, when I click login, then I should see the correct number of products")
     public void checkNumberOfProductsOnInventoryPage() throws IOException {
@@ -101,22 +139,6 @@ public class SwagLabsTests {
             }
         }
         MatcherAssert.assertThat(inventoryCount, Matchers.is(6));
-    }
-
-    @Test
-    @DisplayName("GIVEN I enter a valid username AND an invalid password WHEN I click login THEN I should see epic sad face")
-    public void unsuccessfulLogin(){
-        webDriver.get(BASE_URL);
-        WebElement usernameField = webDriver.findElement(By.name("user-name"));
-        WebElement passwordField = webDriver.findElement(By.name("password"));
-        WebElement loginButton = webDriver.findElement(By.id("login-button"));
-        WebElement errorField = webDriver.findElement(By.className("error-message-container"));
-        usernameField.sendKeys("standard_user");
-        passwordField.sendKeys("wrong_password");
-        loginButton.click();
-        MatcherAssert.assertThat(webDriver.getCurrentUrl(), Matchers.is(BASE_URL));
-        MatcherAssert.assertThat(errorField.getText(), Matchers.startsWith("Epic sadface:"));
-
     }
 
     @Test
@@ -160,6 +182,26 @@ public class SwagLabsTests {
         WebElement shoppingCartLink = webDriver.findElement(By.className("shopping_cart_link"));
         Assertions.assertEquals("",shoppingCartLink.getText());
         shoppingCartLink.click();
+        List<WebElement> cart = webDriver.findElements(By.className("cart_item"));
+        MatcherAssert.assertThat(cart.size(), Matchers.is(0));
+    }
+
+    @Test
+    @DisplayName("GIVEN I am logged in AND I have an item in my cart WHEN I click remove item THEN the item is removed.")
+    public void successfulRemoveItemFromCart(){
+        webDriver.get(BASE_URL);
+        WebElement username = webDriver.findElement(By.name("user-name"));
+        WebElement password = webDriver.findElement(By.name("password"));
+        WebElement login = webDriver.findElement(By.id("login-button"));
+        username.sendKeys("standard_user");
+        password.sendKeys("secret_sauce");
+        login.click();
+        WebElement addItemButton = webDriver.findElement(By.className("btn_inventory"));
+        WebElement shoppingCartLink = webDriver.findElement(By.className("shopping_cart_link"));
+        addItemButton.click();
+        shoppingCartLink.click();
+        WebElement removeItemButton = webDriver.findElement(By.className("cart_button"));
+        removeItemButton.click();
         List<WebElement> cart = webDriver.findElements(By.className("cart_item"));
         MatcherAssert.assertThat(cart.size(), Matchers.is(0));
     }
