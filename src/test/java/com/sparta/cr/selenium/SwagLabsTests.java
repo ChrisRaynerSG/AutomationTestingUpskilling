@@ -206,6 +206,36 @@ public class SwagLabsTests {
         MatcherAssert.assertThat(cart.size(), Matchers.is(0));
     }
 
+    @Test
+    @DisplayName("GIVEN I am logged in AND I have Items in my cart WHEN I checkout my items AND input my details THEN I successfully purchase my items")
+    public void successfulCheckoutItemsInCart(){
+        webDriver.get(BASE_URL);
+        WebElement username = webDriver.findElement(By.name("user-name"));
+        WebElement password = webDriver.findElement(By.name("password"));
+        WebElement login = webDriver.findElement(By.id("login-button"));
+        username.sendKeys("standard_user");
+        password.sendKeys("secret_sauce");
+        login.click();
+        WebElement addItemButton = webDriver.findElement(By.className("btn_inventory"));
+        WebElement shoppingCartLink = webDriver.findElement(By.className("shopping_cart_link"));
+        addItemButton.click();
+        Assertions.assertEquals("1",shoppingCartLink.getText());
+        shoppingCartLink.click();
+        WebElement checkoutButton = webDriver.findElement(By.id("checkout"));
+        checkoutButton.click();
+        WebElement firstName = webDriver.findElement(By.id("first-name"));
+        WebElement lastName = webDriver.findElement(By.id("last-name"));
+        WebElement zipCode = webDriver.findElement(By.id("postal-code"));
+        WebElement continueButton = webDriver.findElement(By.id("continue"));
+        firstName.sendKeys("Joe");
+        lastName.sendKeys("Grizzly");
+        zipCode.sendKeys("12345");
+        continueButton.click();
+        WebElement finishButton = webDriver.findElement(By.id("finish"));
+        finishButton.click();
+        Assertions.assertEquals(BASE_URL + "checkout-complete.html", webDriver.getCurrentUrl());
+    }
+
     //create a test for valid email, invalid password, assert error message contains EPIC SADFACE
 
     //create a test for dragged box to appear in dropped box, USE ACTIONS
