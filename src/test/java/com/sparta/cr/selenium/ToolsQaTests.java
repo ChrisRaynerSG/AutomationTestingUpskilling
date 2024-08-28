@@ -1,9 +1,12 @@
 package com.sparta.cr.selenium;
 
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
@@ -50,6 +53,13 @@ public class ToolsQaTests {
     }
 
     @Test
-
-
+    @DisplayName("GIVEN on droppable page WHEN Drag me box is placed in drop here box, THEN Dropped! : text appears")
+    public void testDroppedTextAppearsWhenBoxMoved(){
+        webDriver.get(BASE_URL);
+        WebElement dragMeBox = webDriver.findElement(By.id("draggable"));
+        WebElement dropBox = webDriver.findElement(By.id("droppable"));
+        Actions actions = new Actions(webDriver);
+        actions.dragAndDrop(dragMeBox, dropBox).perform();
+        Assertions.assertEquals("Dropped!", dropBox.getText());
+    }
 }
