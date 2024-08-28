@@ -27,7 +27,6 @@ public class SwagLabsTests {
         options.addArguments("--start-maximized");
         options.addArguments("--headless");
         options.addArguments("--remote-allow-origins=");
-//        options.setImplicitWaitTimeout(Duration.of(10));
         return options;
     }
 
@@ -120,32 +119,50 @@ public class SwagLabsTests {
 
     }
 
+    @Test
+    @DisplayName("GIVEN I am logged in WHEN I add an item to my cart THEN the item should be displayed in my cart")
+    public void successfulAddItemToCart() throws IOException {
+        webDriver.get(BASE_URL);
+        WebElement username = webDriver.findElement(By.name("user-name"));
+        WebElement password = webDriver.findElement(By.name("password"));
+        WebElement login = webDriver.findElement(By.id("login-button"));
+        username.sendKeys("standard_user");
+        password.sendKeys("secret_sauce");
+        login.click();
+        WebElement addItemButton = webDriver.findElement(By.className("btn_inventory"));
+        WebElement shoppingCartLink = webDriver.findElement(By.className("shopping_cart_link"));
+        addItemButton.click();
+        Assertions.assertEquals("1",shoppingCartLink.getText());
+        shoppingCartLink.click();
+        List<WebElement> cart = webDriver.findElements(By.className("cart_item"));
+        try(PrintWriter writer = new PrintWriter(new FileWriter("cart.txt"))) {
+            for(WebElement item : cart){
+                WebElement quantityElement = item.findElement(By.className("cart_quantity"));
+                WebElement nameElement = item.findElement(By.className("inventory_item_name"));
+                String itemName = nameElement.getText() + ": " + quantityElement.getText();
+                writer.println(itemName);
+                System.out.println(itemName);
+            }
+        }
+        MatcherAssert.assertThat(cart.size(), Matchers.is(1));
+    }
 
-//    @Test
-//    @DisplayName("Given I am logged in, when I view the inventory page, I should see the correct number of products")
-//    public void checkNumberOfProductsOnInventoryPage() throws IOException {
-//        webDriver.get(BASE_URL);
-//        WebElement usernameField = webDriver.findElement(By.name("user-name"));
-//        WebElement passwordField = webDriver.findElement(By.name("password"));
-//        WebElement loginButton = webDriver.findElement(By.id("login-button"));
-//        usernameField.sendKeys("standard_user");
-//        passwordField.sendKeys("secret_sauce");
-//        loginButton.click();
-//        List<WebElement> items = webDriver.findElements(By.className("inventory_item"));
-//        int itemsCount = items.size();
-//
-//        try(PrintWriter writer = new PrintWriter(new FileWriter("products.txt"))){
-//            for(WebElement item : items){
-//                WebElement nameElement = item.findElement(By.className("inventory_item_name"));
-//                WebElement priceElement = item.findElement(By.className("inventory_item_price"));
-//                String itemInfo = nameElement.getText() + ": " + priceElement.getText();
-//                writer.println(itemInfo);
-//                System.out.println(itemInfo);
-//            }
-//        }
-//
-//        MatcherAssert.assertThat(itemsCount, Matchers.is(6));
-//    }
+    @Test
+    @DisplayName("GIVEN I am logged in WHEN I land on the homepage THEN no items should be displayed in my cart")
+    public void noItemsWhenFirstLogin(){
+        webDriver.get(BASE_URL);
+        WebElement username = webDriver.findElement(By.name("user-name"));
+        WebElement password = webDriver.findElement(By.name("password"));
+        WebElement login = webDriver.findElement(By.id("login-button"));
+        username.sendKeys("standard_user");
+        password.sendKeys("secret_sauce");
+        login.click();
+        WebElement shoppingCartLink = webDriver.findElement(By.className("shopping_cart_link"));
+        Assertions.assertEquals("",shoppingCartLink.getText());
+        shoppingCartLink.click();
+        List<WebElement> cart = webDriver.findElements(By.className("cart_item"));
+        MatcherAssert.assertThat(cart.size(), Matchers.is(0));
+    }
 
     //create a test for valid email, invalid password, assert error message contains EPIC SADFACE
 

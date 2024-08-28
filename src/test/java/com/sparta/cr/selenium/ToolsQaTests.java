@@ -51,7 +51,6 @@ public class ToolsQaTests {
     public void tearDown(){
         webDriver.quit();
     }
-
     @Test
     @DisplayName("GIVEN on droppable page WHEN Drag me box is placed in drop here box, THEN Dropped! : text appears")
     public void testDroppedTextAppearsWhenBoxMoved(){
