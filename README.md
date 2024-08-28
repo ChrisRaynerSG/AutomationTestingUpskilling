@@ -20,6 +20,7 @@ This project includes two Test classes for Selenium Web Driver and tests the fol
     - inventory page loads correctly
     - adding items to cart
     - removing items from cart
+    - happy checkout path
    
   - `ToolsQaTests`
     - Draggable works correctly
