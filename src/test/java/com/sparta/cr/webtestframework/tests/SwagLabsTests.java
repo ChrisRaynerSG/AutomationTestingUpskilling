@@ -46,7 +46,7 @@ public class SwagLabsTests extends TestSetup {
     @DisplayName("Given I enter a valid username and password, when I click login, then I should land on the inventory page, and should see the right number of items")
     public void checkNumberOfInventoryItems(){
         website = getWebsite(BASE_URL);
-        website.getHomePage().login("standard_user", "secret_sauce");
+        website.getHomePage().successfulUserLogin();
         Assertions.assertEquals(6, website.getInventoryPage().getInventoryItems().size());
     }
 
@@ -54,7 +54,7 @@ public class SwagLabsTests extends TestSetup {
     @DisplayName("Given that I am on the inventory page, when I click add item to cart, then my cart is updated")
     public void addItemToCart(){
         website = getWebsite(BASE_URL);
-        website.getHomePage().login("standard_user", "secret_sauce");
+        website.getHomePage().successfulUserLogin();
         Assertions.assertEquals("", website.getInventoryPage().getShoppingCartLink());
         website.getInventoryPage().addItemToShoppingCart();
         Assertions.assertEquals("1", website.getInventoryPage().getShoppingCartLink());

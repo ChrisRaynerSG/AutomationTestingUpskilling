@@ -30,6 +30,11 @@ public class HomePage {
         enterPassword(password);
         clickLoginButton();
     }
+    public void successfulUserLogin(){
+        enterUserName("standard_user");
+        enterPassword("secret_sauce");
+        clickLoginButton();
+    }
 
     public String getErrorMessage() {
         return driver.findElement(errorContainer).getText();
