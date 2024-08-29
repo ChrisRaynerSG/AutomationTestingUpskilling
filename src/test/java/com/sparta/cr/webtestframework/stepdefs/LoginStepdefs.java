@@ -34,13 +34,13 @@ public class LoginStepdefs {
     }
 
     @And("I have entered the username {string}")
-    public void iHaveEnteredTheUsername(String arg0) {
-        website.getHomePage().enterUserName(arg0);
+    public void iHaveEnteredTheUsername(String username) {
+        website.getHomePage().enterUserName(username);
     }
 
     @And("I have entered the password {string}")
-    public void iHaveEnteredThePassword(String arg0) {
-        website.getHomePage().enterPassword(arg0);
+    public void iHaveEnteredThePassword(String password) {
+        website.getHomePage().enterPassword(password);
     }
 
     @When("I click the login button")
@@ -54,7 +54,7 @@ public class LoginStepdefs {
     }
 
     @Then("I should see an error message that contains {string}")
-    public void iShouldSeeAnErrorMessageThatContains(String expected) {
+    public void iShouldSeeAnErrorMessageThatContains() {
         Assertions.assertTrue(website.getHomePage().getErrorMessage().contains("Epic sadface"));
     }
 
